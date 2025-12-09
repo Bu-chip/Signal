@@ -21,14 +21,52 @@
         <!-- Start Screen -->
         <div class="start-screen" id="startScreen">
             <h1 class="title glitch" data-text="SIGNAL">SIGNAL</h1>
-            <p class="subtitle">SYNTHWAVE RUNNER</p>
+            <p class="subtitle">GEOMETRY RUNNER</p>
             <div class="instructions">
-                <p>⬆⬇⬅➡ WASD = MOVE</p>
-                <p>SPACEBAR = PHASE SHIFT</p>
-                <p class="warning">AVOID CORRUPTION</p>
+                <p>🚀 SPACE/CLICK = JUMP/FLY</p>
+                <p>🎯 COLLECT ORBS • AVOID SPIKES</p>
+                <p>🌀 PORTALS CHANGE YOUR MODE</p>
             </div>
-            <button class="start-btn" id="startBtn">START TRANSMISSION</button>
-            <div class="high-score">HIGH SCORE: <span id="highScoreDisplay">0</span>m</div>
+            <button class="start-btn" id="startBtn">SELECT LEVEL</button>
+            <div class="high-score">ORBS COLLECTED: <span id="highScoreDisplay">0</span></div>
+        </div>
+
+        <!-- Level Select Screen -->
+        <div class="level-select" id="levelSelect">
+            <h2 class="glitch" data-text="SELECT LEVEL">SELECT LEVEL</h2>
+            <div class="level-grid">
+                <div class="level-card" data-level="1">
+                    <div class="level-number">01</div>
+                    <div class="level-name">NEON GRID</div>
+                    <div class="level-orbs">Orbs: <span id="level1Orbs">0</span>/10</div>
+                    <div class="level-status unlocked">UNLOCKED</div>
+                </div>
+                <div class="level-card locked" data-level="2">
+                    <div class="level-number">02</div>
+                    <div class="level-name">CYBER TUNNEL</div>
+                    <div class="level-orbs">Orbs: <span id="level2Orbs">0</span>/10</div>
+                    <div class="level-status">Need 7 Orbs</div>
+                </div>
+                <div class="level-card locked" data-level="3">
+                    <div class="level-number">03</div>
+                    <div class="level-name">DIGITAL CITY</div>
+                    <div class="level-orbs">Orbs: <span id="level3Orbs">0</span>/10</div>
+                    <div class="level-status">Need 15 Orbs</div>
+                </div>
+                <div class="level-card locked" data-level="4">
+                    <div class="level-number">04</div>
+                    <div class="level-name">VOID SPACE</div>
+                    <div class="level-orbs">Orbs: <span id="level4Orbs">0</span>/10</div>
+                    <div class="level-status">Need 23 Orbs</div>
+                </div>
+                <div class="level-card locked" data-level="5">
+                    <div class="level-number">05</div>
+                    <div class="level-name">CORRUPTION</div>
+                    <div class="level-orbs">Orbs: <span id="level5Orbs">0</span>/10</div>
+                    <div class="level-status">Need 30 Orbs</div>
+                </div>
+            </div>
+            <button class="back-btn" id="backBtn">BACK</button>
         </div>
 
         <!-- Game Canvas -->
@@ -37,21 +75,27 @@
         <!-- HUD -->
         <div class="hud" id="hud">
             <div class="hud-left">
-                <div class="score-display">
-                    <span class="label">DISTANCE</span>
-                    <span class="value" id="score">0</span>m
+                <div class="level-display">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="currentLevel">01</span>
                 </div>
-                <div class="combo-display">
-                    <span class="label">COMBO</span>
-                    <span class="value" id="combo">x0</span>
+                <div class="orbs-display">
+                    <span class="label">ORBS</span>
+                    <span class="value" id="orbsCollected">0</span>/10
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="mode-indicator" id="modeIndicator">
+                    🎮 CUBE MODE
                 </div>
             </div>
             <div class="hud-right">
-                <div class="phase-display">
-                    <span class="label">PHASE SHIFT</span>
-                    <div class="cooldown-bar">
-                        <div class="cooldown-fill" id="phaseFill"></div>
-                    </div>
+                <div class="attempts-display">
+                    <span class="label">ATTEMPT</span>
+                    <span class="value" id="attempts">1</span>
                 </div>
             </div>
         </div>
@@ -60,11 +104,27 @@
         <div class="game-over" id="gameOver">
             <h2 class="glitch" data-text="SIGNAL LOST">SIGNAL LOST</h2>
             <div class="final-stats">
-                <p>DISTANCE: <span id="finalScore">0</span>m</p>
-                <p>MAX COMBO: <span id="finalCombo">0</span>x</p>
-                <p class="new-record" id="newRecord">NEW RECORD!</p>
+                <p>PROGRESS: <span id="finalProgress">0</span>%</p>
+                <p>ORBS: <span id="finalOrbs">0</span>/10</p>
+                <p>ATTEMPT: <span id="finalAttempts">1</span></p>
             </div>
-            <button class="restart-btn" id="restartBtn">RETRY TRANSMISSION</button>
+            <button class="restart-btn" id="restartBtn">RETRY</button>
+            <button class="menu-btn" id="menuBtn">LEVEL SELECT</button>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div class="level-complete" id="levelComplete">
+            <h2 class="glitch" data-text="LEVEL COMPLETE">LEVEL COMPLETE</h2>
+            <div class="complete-stats">
+                <div class="star-rating" id="starRating">
+                    ⭐⭐⭐
+                </div>
+                <p>ORBS: <span id="completeOrbs">10</span>/10</p>
+                <p>ATTEMPTS: <span id="completeAttempts">1</span></p>
+                <p class="bonus-orbs" id="bonusOrbs"></p>
+            </div>
+            <button class="restart-btn" id="nextLevelBtn">NEXT LEVEL</button>
+            <button class="menu-btn" id="menuBtn2">LEVEL SELECT</button>
         </div>
     </div>
 

@@ -194,6 +194,120 @@ body {
 }
 
 /* ============================================
+   LEVEL SELECT SCREEN
+   ============================================ */
+.level-select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.95);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+}
+
+.level-select h2 {
+    font-size: 2.5rem;
+    color: var(--neon-cyan);
+    text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan);
+    margin-bottom: 2rem;
+}
+
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.level-card {
+    background: rgba(0, 243, 255, 0.1);
+    border: 2px solid var(--neon-cyan);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    text-align: center;
+}
+
+.level-card:hover:not(.locked) {
+    background: rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+    transform: translateY(-5px);
+}
+
+.level-card.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.level-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--neon-pink);
+    text-shadow: 0 0 20px var(--neon-pink);
+    margin-bottom: 0.5rem;
+}
+
+.level-name {
+    font-size: 1.2rem;
+    color: var(--neon-cyan);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.2rem;
+}
+
+.level-orbs {
+    font-size: 0.9rem;
+    color: var(--neon-yellow);
+    margin: 0.5rem 0;
+}
+
+.level-status {
+    font-size: 0.8rem;
+    color: var(--neon-purple);
+    margin-top: 0.5rem;
+}
+
+.level-status.unlocked {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.back-btn, .menu-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.8rem 2rem;
+    background: transparent;
+    color: var(--neon-purple);
+    border: 2px solid var(--neon-purple);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--neon-purple);
+    margin: 0.5rem;
+}
+
+.back-btn:hover, .menu-btn:hover {
+    background: var(--neon-purple);
+    color: var(--bg-black);
+    box-shadow: 0 0 20px var(--neon-purple);
+    transform: scale(1.05);
+}
+
+/* ============================================
    HUD (Head-Up Display)
    ============================================ */
 .hud {
@@ -201,23 +315,36 @@ body {
     top: 20px;
     left: 20px;
     right: 20px;
-    display: flex;
+    display: none;
     justify-content: space-between;
+    align-items: flex-start;
     z-index: 50;
     pointer-events: none;
 }
 
-.hud-left, .hud-right {
+.hud-left, .hud-right, .hud-center {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.score-display, .combo-display, .phase-display {
+.hud-center {
+    align-items: center;
+    flex: 1;
+    max-width: 400px;
+    margin: 0 2rem;
+}
+
+.level-display, .orbs-display, .attempts-display {
     background: rgba(10, 10, 15, 0.8);
     border: 2px solid var(--neon-cyan);
     padding: 10px 20px;
     box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+.orbs-display {
+    border-color: var(--neon-yellow);
+    box-shadow: 0 0 10px rgba(255, 190, 11, 0.5);
 }
 
 .label {
@@ -234,21 +361,34 @@ body {
     text-shadow: 0 0 10px var(--neon-pink);
 }
 
-/* Phase Shift Cooldown Bar */
-.cooldown-bar {
-    width: 150px;
-    height: 15px;
-    background: rgba(139, 0, 255, 0.2);
-    border: 1px solid var(--neon-purple);
-    margin-top: 5px;
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(0, 243, 255, 0.2);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
 }
 
-.cooldown-fill {
+.progress-fill {
     height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
-    box-shadow: 0 0 10px var(--neon-purple);
-    transition: width 0.1s linear;
+    width: 0%;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    box-shadow: 0 0 10px var(--neon-cyan);
+    transition: width 0.3s ease;
+}
+
+.mode-indicator {
+    background: rgba(10, 10, 15, 0.8);
+    border: 2px solid var(--neon-purple);
+    padding: 8px 15px;
+    box-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
+    font-size: 0.9rem;
+    color: var(--neon-purple);
+    text-shadow: 0 0 10px var(--neon-purple);
+    margin-top: 10px;
 }
 
 /* ============================================
@@ -302,6 +442,60 @@ body {
 @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* ============================================
+   LEVEL COMPLETE SCREEN
+   ============================================ */
+.level-complete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.95);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.level-complete h2 {
+    font-size: 3rem;
+    color: var(--neon-cyan);
+    text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan);
+    margin-bottom: 2rem;
+}
+
+.complete-stats {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    line-height: 2;
+}
+
+.star-rating {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: star-pop 0.5s ease-out;
+}
+
+@keyframes star-pop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.bonus-orbs {
+    color: var(--neon-yellow);
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    text-shadow: 0 0 15px var(--neon-yellow);
+    animation: pulse 1.5s infinite;
 }
 
 /* ============================================
