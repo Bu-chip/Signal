@@ -8,10 +8,14 @@ const ctx = canvas.getContext('2d');
 
 // Set canvas size
 function resizeCanvas() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    const container = canvas.parentElement;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    console.log('Canvas resized to:', canvas.width, 'x', canvas.height);
 }
-resizeCanvas();
+
+// Ensure canvas is sized after DOM loads
+setTimeout(resizeCanvas, 100);
 window.addEventListener('resize', resizeCanvas);
 
 // ============================================
@@ -107,7 +111,7 @@ class Player {
     constructor() {
         this.size = 20;
         this.x = 150;
-        this.y = canvas.height - 100;
+        this.y = 0; // Will be set properly in reset
         this.velocityY = 0;
         this.isJumping = false;
         this.isOnGround = false;
@@ -301,6 +305,18 @@ class Player {
             width: this.size,
             height: this.size
         };
+    }
+
+    reset() {
+        this.x = 150;
+        this.y = canvas.height - 100;
+        this.velocityY = 0;
+        this.isJumping = false;
+        this.isOnGround = false;
+        this.mode = 'cube';
+        this.rotation = 0;
+        this.trail = [];
+        console.log('Player reset at:', this.x, this.y, 'Canvas height:', canvas.height);
     }
 }
 
@@ -1222,11 +1238,12 @@ function levelComplete() {
 }
 
 function resetLevel() {
+    console.log('Resetting level', game.currentLevel);
     game.state = 'playing';
     game.frame = 0;
     game.cameraX = 0;
 
-    player = new Player();
+    player.reset();
     levelManager = new LevelManager(game.currentLevel);
 
     particles.length = 0;
@@ -1237,15 +1254,17 @@ function resetLevel() {
 
     updateOrbDisplay();
     document.getElementById('attempts').textContent = game.attempts;
+    console.log('Level reset complete. Player at:', player.x, player.y);
 }
 
 function loadLevel(levelNum) {
+    console.log('Loading level', levelNum);
     game.currentLevel = levelNum;
     game.attempts = 1;
     game.frame = 0;
     game.cameraX = 0;
 
-    player = new Player();
+    player.reset();
     levelManager = new LevelManager(levelNum);
 
     particles.length = 0;
@@ -1257,6 +1276,10 @@ function loadLevel(levelNum) {
     document.getElementById('currentLevel').textContent = String(levelNum).padStart(2, '0');
     updateOrbDisplay();
     document.getElementById('attempts').textContent = game.attempts;
+
+    console.log('Level loaded. Canvas:', canvas.width, 'x', canvas.height);
+    console.log('Player position:', player.x, player.y);
+    console.log('Game state:', game.state);
 }
 
 function showLevelSelect() {
@@ -1329,6 +1352,12 @@ canvas.addEventListener('touchend', () => {
 let player = new Player();
 let levelManager = new LevelManager(1);
 
+// Initialize player position after canvas is ready
+setTimeout(() => {
+    player.reset();
+    console.log('Initial player position:', player.x, player.y);
+}, 200);
+
 function gameLoop() {
     // Apply screen shake
     if (game.screenShake > 0) {
@@ -1340,6 +1369,9 @@ function gameLoop() {
         game.screenShake *= 0.9;
         if (game.screenShake < 0.5) game.screenShake = 0;
     }
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw background
     if (game.state === 'playing') {
