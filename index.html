@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGNAL - Synthwave Runner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- CRT Scanlines Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Glitch Overlay (activado en colisión) -->
+    <div class="glitch-overlay" id="glitchOverlay"></div>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <h1 class="title glitch" data-text="SIGNAL">SIGNAL</h1>
+            <p class="subtitle">SYNTHWAVE RUNNER</p>
+            <div class="instructions">
+                <p>⬆⬇⬅➡ WASD = MOVE</p>
+                <p>SPACEBAR = PHASE SHIFT</p>
+                <p class="warning">AVOID CORRUPTION</p>
+            </div>
+            <button class="start-btn" id="startBtn">START TRANSMISSION</button>
+            <div class="high-score">HIGH SCORE: <span id="highScoreDisplay">0</span>m</div>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD -->
+        <div class="hud" id="hud">
+            <div class="hud-left">
+                <div class="score-display">
+                    <span class="label">DISTANCE</span>
+                    <span class="value" id="score">0</span>m
+                </div>
+                <div class="combo-display">
+                    <span class="label">COMBO</span>
+                    <span class="value" id="combo">x0</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="phase-display">
+                    <span class="label">PHASE SHIFT</span>
+                    <div class="cooldown-bar">
+                        <div class="cooldown-fill" id="phaseFill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="game-over" id="gameOver">
+            <h2 class="glitch" data-text="SIGNAL LOST">SIGNAL LOST</h2>
+            <div class="final-stats">
+                <p>DISTANCE: <span id="finalScore">0</span>m</p>
+                <p>MAX COMBO: <span id="finalCombo">0</span>x</p>
+                <p class="new-record" id="newRecord">NEW RECORD!</p>
+            </div>
+            <button class="restart-btn" id="restartBtn">RETRY TRANSMISSION</button>
+        </div>
+    </div>
+
+    <!-- Audio (placeholder for synthwave music) -->
+    <!-- <audio id="bgMusic" loop>
+        <source src="audio/synthwave.mp3" type="audio/mpeg">
+    </audio> -->
+
+    <script src="game.js"></script>
+</body>
+</html>
